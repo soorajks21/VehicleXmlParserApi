@@ -5,7 +5,7 @@ const {
 } = require("../services/VehicleService");
 
 const GetVehicleMakes = async (req, res) => {
-  const vehicleMakes = await FetchVehicleTypes(req, res).then((data) => data);
+  const vehicleMakes = await FetchVehicles(req, res).then((data) => data);
   if (vehicleMakes) {
     res.status(200).send(vehicleMakes);
   } else {
