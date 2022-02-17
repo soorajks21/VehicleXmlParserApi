@@ -8,8 +8,9 @@ const {
 const cronJobs = () => {
   const getVehicleTypes = cron.schedule(
     "* * * * *",
-    () => {
-      FetchVehicleTypes();
+    async () => {
+      const isFetched = await FetchVehicleTypes();
+      !isFetched && getVehicleTypes.stop();
     },
     {
       scheduled: false,
@@ -17,11 +18,10 @@ const cronJobs = () => {
   );
 
   const fetchVehicle = cron.schedule(
-    "* */5 * * *",
+    "* */12 * * *",
     async () => {
-      //fetchVehicleMakeService();
       getVehicleTypes.stop();
-      const value = fetchVehicleMakeService();
+      const value = await fetchVehicleMakeService();
       value && getVehicleTypes.start();
     },
     {
@@ -29,7 +29,7 @@ const cronJobs = () => {
     }
   );
 
-  getVehicleTypes.start();
+  fetchVehicle.start();
 };
 
 module.exports = { cronJobs };
