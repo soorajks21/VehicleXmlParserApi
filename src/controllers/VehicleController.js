@@ -1,6 +1,4 @@
 const {
-  fetchVehicleMakeService,
-  FetchVehicleTypes,
   FetchVehicles,
 } = require("../services/VehicleService");
 

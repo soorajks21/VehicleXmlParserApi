@@ -35,7 +35,7 @@ const fetchVehicleMakeService = async () => {
     const vehicleDbCount = await getVehilceCount();
     const isFetch = fetchVehicleMake(apiCount, vehicleDbCount);
     if (isFetch) {
-      vehicleDbCount > 0 && removeVehicles();
+      vehicleDbCount > 0 && await removeVehicles();
       const makes = vehicleMakes(response[0].AllVehicleMakes);
       await insertVehicleMakes(makes);
     }
@@ -54,8 +54,9 @@ const FetchVehicleTypes = async () => {
     if (makeDetails.length > 0) {
       const vehicleDetails = await parseVehicleTypesToJson(makeDetails);
       const [updatedId, createVehicleTypes] = getVehicleDetails(vehicleDetails);
-      const isSuccess = await insertVehicleTypes(createVehicleTypes);
+      const isSuccess = createVehicleTypes && await insertVehicleTypes(createVehicleTypes);
       isSuccess && updateVehicleFetchStatus(updatedId);
+      return isSuccess;
     } else {
       return false;
     }

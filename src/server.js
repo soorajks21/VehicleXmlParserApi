@@ -1,9 +1,7 @@
 const server = require("./app");
 const scheduler = require("./scheduler");
 
-
 scheduler.cronJobs();
-
 
 const PORT = process.env.PORT || 5000;
 
