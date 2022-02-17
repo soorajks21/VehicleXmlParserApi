@@ -58,7 +58,6 @@ const parseVehicleTypesToJson = async (xmlVehicleTypes) => {
     );
   });
 
-
   const vehicleDetails = await Promise.allSettled(vehicleTypePromises);
 
   return vehicleDetails;
@@ -66,26 +65,26 @@ const parseVehicleTypesToJson = async (xmlVehicleTypes) => {
 
 const getVehicleDetails = (vehicleDetails) => {
   let updatedId = [];
- 
- 
-    const createVehicleTypes = vehicleDetails.map((items) => {
-      if (items.status == "fulfilled") {
+  let createVehicleTypes = []
+   vehicleDetails.forEach((items) => {
+    if (items.status == "fulfilled") {
       updatedId.push(items.value[1].makeId);
       const arr = items?.value[0]?.VehicleTypesForMakeIds
-      ? items.value[0].VehicleTypesForMakeIds.reduce((acc, curr) => {
-      acc.push({
-            typeId: curr.VehicleTypeId[0],
-            typeName: curr.VehicleTypeName[0],
-          });
-          return acc;
-        }, [])
-      : [];
-      
-    return { vehicle: arr, makeId: items.value[1].makeId };
-  }
-})
-  return [updatedId, createVehicleTypes];
-}
+        ? items.value[0].VehicleTypesForMakeIds.reduce((acc, curr) => {
+            acc.push({
+              typeId: curr.VehicleTypeId[0],
+              typeName: curr.VehicleTypeName[0],
+            });
+            return acc;
+          }, [])
+        : [];
+
+      createVehicleTypes.push({ vehicle: arr, makeId: items.value[1].makeId });
+    }
+   });
+  
+  return createVehicleTypes.length > 0  ? [updatedId, createVehicleTypes] : [false, false];
+};
 
 module.exports = {
   convertXmltoJson,
@@ -93,6 +92,5 @@ module.exports = {
   fetchVehicleMake,
   totalDataFetched,
   parseVehicleTypesToJson,
-  getVehicleDetails
-  
+  getVehicleDetails,
 };
