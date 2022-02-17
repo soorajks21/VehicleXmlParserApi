@@ -6,7 +6,7 @@ const insertVehicleMakes = async (makes) =>
     .catch((err) => err);
 
 const getVehicleMakes = async () =>
-  await VehicleMake.find({ vehicleTypeFetchStatus: false }).limit(15);
+  await VehicleMake.find({ vehicleTypeFetchStatus: false }).limit(20);
 
 const getVehilceCount = async () =>
   await VehicleMake.count()
@@ -20,6 +20,27 @@ const updateVehicleFetchStatus = async (data) =>
       $set: { vehicleTypeFetchStatus: true },
     }
   );
+
+const updateVehicleMakes = async (data) => {
+  const values = Promise.all(
+    data.map(async (makes) => {
+      await VehicleMake.updateOne(
+        { makeId: makes.makeId },
+        {
+          $setOnInsert: {
+            makeId: makes.makeId,
+            makeName: makes.makeName,
+            vehicleTypeFetchStatus: makes.vehicleTypeFetchStatus,
+            vehicleTypeUrl: makes.vehicleTypeUrl,
+          },
+        },
+        { upsert: true }
+      );
+    })
+  );
+
+  await values.then((data) => data).catch((err) => err);
+};
 
 const getVehicles = async () =>
   await VehicleMake.aggregate([
@@ -60,4 +81,5 @@ module.exports = {
   updateVehicleFetchStatus,
   getVehicles,
   removeVehicles,
+  updateVehicleMakes,
 };
