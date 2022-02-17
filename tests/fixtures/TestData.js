@@ -181,6 +181,16 @@ const parsedXmltoJsonData = [
   },
 ];
 
+
+
+
+const statusRejected = [
+  {
+    status: "rejected",
+  }
+];
+
+
 const inputVehicleMakes = [
   {
     makeId: "570",
@@ -268,4 +278,5 @@ module.exports = {
   responseData,
   parsedXmltoJsonData,
   inputVehicleMakes,
+  statusRejected,
 };

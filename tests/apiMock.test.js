@@ -6,6 +6,7 @@ const {
   responseData,
   parsedXmltoJsonData,
   inputVehicleMakes,
+  statusRejected
 } = require("./fixtures/TestData");
 
 test("should fetch vehicletypes and parsexml", () => {
